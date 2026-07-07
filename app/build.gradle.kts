@@ -44,14 +44,16 @@ android {
     // (so CI can publish an installable APK). When the env vars are absent, the
     // release build falls back to unsigned — same behavior as before — so local
     // builds keep working without any keystore setup.
-    val releaseSigning = providers.environmentVariable("CRUSH_STORE_FILE").orNull?.let { path ->
-        signingConfigs.create("release") {
-            storeFile = file(path)
-            storePassword = providers.environmentVariable("CRUSH_STORE_PASSWORD").orNull
-            keyAlias = providers.environmentVariable("CRUSH_KEY_ALIAS").orNull
-            keyPassword = providers.environmentVariable("CRUSH_KEY_PASSWORD").orNull
+    val releaseSigning = providers.environmentVariable("CRUSH_STORE_FILE").orNull
+        ?.takeIf { it.isNotBlank() }
+        ?.let { path ->
+            signingConfigs.create("release") {
+                storeFile = file(path)
+                storePassword = providers.environmentVariable("CRUSH_STORE_PASSWORD").orNull
+                keyAlias = providers.environmentVariable("CRUSH_KEY_ALIAS").orNull
+                keyPassword = providers.environmentVariable("CRUSH_KEY_PASSWORD").orNull
+            }
         }
-    }
 
     buildTypes {
         debug {
