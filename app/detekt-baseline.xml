@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>EnumNaming:Message.kt$MessageRole$assistant</ID>
+    <ID>EnumNaming:Message.kt$MessageRole$system</ID>
+    <ID>EnumNaming:Message.kt$MessageRole$tool</ID>
+    <ID>EnumNaming:Message.kt$MessageRole$user</ID>
+    <ID>MatchingDeclarationName:Control.kt$ServerControl</ID>
+    <ID>TooManyFunctions:CrushApiClient.kt$CrushApiClient</ID>
+    <ID>TooManyFunctions:CrushRepository.kt$CrushRepository</ID>
+    <ID>UnusedParameter:ChatScreen.kt$onPick: (String?) -&gt; Unit</ID>
+  </CurrentIssues>
+</SmellBaseline>

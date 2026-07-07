@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.CrushAndroid" parent="android:Theme.Material.NoActionBar" />
+</resources>

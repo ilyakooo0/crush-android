@@ -1,0 +1,35 @@
+# Gradle
+.gradle/
+build/
+
+# Kotlin
+.kotlin/
+
+# Local configuration (signing keys, api keys, etc.)
+local.properties
+.buildenv.sh
+*.keystore
+*.jks
+
+# IntelliJ / Android Studio
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Nix
+result
+.direnv/
+
+# Local SDK overlay (generated from the Nix SDK to fix platform dir naming)
+.android-sdk/
