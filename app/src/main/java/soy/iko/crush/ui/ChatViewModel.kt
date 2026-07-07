@@ -31,6 +31,7 @@ data class ChatUiState(
     val messages: List<Message> = emptyList(),
     val pendingPermissions: List<PermissionRequest> = emptyList(),
     val isBusy: Boolean = false,
+    val isConnecting: Boolean = false,
     val error: String? = null,
 )
 
@@ -41,6 +42,7 @@ class ChatViewModel(
 
     private val _error = MutableStateFlow<String?>(null)
     private val _busy = MutableStateFlow(false)
+    private val _connecting = MutableStateFlow(false)
 
     private var sseJob: Job? = null
 
@@ -55,6 +57,7 @@ class ChatViewModel(
             repo.permissions as Flow<Any>,
             _busy as Flow<Any>,
             _error as Flow<Any>,
+            _connecting as Flow<Any>,
         ) { values ->
             ChatUiState(
                 connection = values[0] as ConnectionState,
@@ -67,6 +70,7 @@ class ChatViewModel(
                 pendingPermissions = values[5] as List<PermissionRequest>,
                 isBusy = values[6] as Boolean,
                 error = values[7] as String?,
+                isConnecting = values[8] as Boolean,
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ChatUiState())
 
@@ -75,20 +79,32 @@ class ChatViewModel(
     fun connect(host: String, workspacePath: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _error.value = null
+            _connecting.value = true
             settings.setHost(host)
             settings.setWorkspace(workspacePath)
             val ok = repo.connect(host)
             if (!ok) {
                 _error.value = "Could not reach crush server at $host"
+                _connecting.value = false
                 return@launch
             }
             val ws = repo.openWorkspace(workspacePath)
             if (ws == null) {
                 _error.value = "Could not open workspace '$workspacePath'"
+                _connecting.value = false
                 return@launch
             }
+            _connecting.value = false
             startEventStream()
         }
+    }
+
+    fun disconnect() {
+        sseJob?.cancel()
+        repo.disconnect()
+        _busy.value = false
+        _connecting.value = false
+        _error.value = null
     }
 
     fun newSession() {

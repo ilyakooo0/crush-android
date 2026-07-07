@@ -70,6 +70,16 @@ class CrushRepository(
         return true
     }
 
+    fun disconnect() {
+        _connection.value = ConnectionState.Disconnected
+        workspaceId = null
+        sessionId = null
+        _messages.value = emptyList()
+        _sessions.value = emptyList()
+        _permissions.value = emptyList()
+        _workspaces.value = emptyList()
+    }
+
     suspend fun refreshWorkspaces() {
         _workspaces.value = runCatching { api.listWorkspaces() }.getOrDefault(emptyList())
     }

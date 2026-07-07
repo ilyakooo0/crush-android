@@ -31,12 +31,14 @@ class MainActivity : ComponentActivity() {
                         onNewSession = vm::newSession,
                         onPickSession = vm::openSession,
                         onGrantPermission = vm::grantPermission,
+                        onDisconnect = vm::disconnect,
                     )
                 } else {
                     ConnectScreen(
                         defaultHost = state.host,
                         defaultWorkspace = state.workspacePath,
                         error = state.error,
+                        isConnecting = state.isConnecting,
                         onConnect = vm::connect,
                     )
                 }
